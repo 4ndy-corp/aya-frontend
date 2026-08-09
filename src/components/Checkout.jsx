@@ -19,7 +19,7 @@ function Field({ label, ...props }) {
   );
 }
 
-export default function Checkout({ onOrderComplete }) {
+export default function Checkout({ onOrderComplete, onBack }) {
   const { items, subtotal, clearCart } = useCart();
   const [form, setForm] = useState({ name: "", email: "", phone: "", address: "", city: "" });
   const [paymentMethod, setPaymentMethod] = useState("card");
@@ -90,6 +90,13 @@ export default function Checkout({ onOrderComplete }) {
   return (
     <section style={{ background: "#15140F", padding: "80px 48px 112px", fontFamily: "'Helvetica Neue', Arial, sans-serif" }}>
       <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
+        <button
+          onClick={onBack}
+          style={{ background: "transparent", border: "none", color: "#7C7A72", fontSize: "13px", cursor: "pointer", padding: 0, marginBottom: "32px" }}
+        >
+          ‹ Volver al catálogo
+        </button>
+
         <p style={{ color: "#9C9F8E", letterSpacing: "0.28em", textTransform: "uppercase", fontSize: "12px", margin: "0 0 12px" }}>
           Un paso más
         </p>

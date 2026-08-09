@@ -32,7 +32,7 @@ export default function PublicSite() {
         )}
 
         {view === "checkout" && (
-          <Checkout onOrderComplete={() => {}} />
+          <Checkout onOrderComplete={() => {}} onBack={() => setView("home")} />
         )}
 
         <CartDrawer onGoToCheckout={() => setView("checkout")} />
