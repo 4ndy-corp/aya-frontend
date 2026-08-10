@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
+import { useIsMobile } from "../hooks/useIsMobile";
 
 const staticContent = {
   brand: "A&A",
@@ -24,6 +25,7 @@ const FALLBACK_CONTACT = {
 
 export default function Footer() {
   const year = new Date().getFullYear();
+  const isMobile = useIsMobile();
   const [contact, setContact] = useState(FALLBACK_CONTACT);
 
   useEffect(() => {
@@ -46,9 +48,9 @@ export default function Footer() {
 
   const content = { ...staticContent, ...contact };
   return (
-    <footer id="contacto" style={{ background: "#0A0A09", padding: "72px 48px 32px", fontFamily: "'Helvetica Neue', Arial, sans-serif" }}>
+    <footer id="contacto" style={{ background: "#0A0A09", padding: isMobile ? "48px 20px 24px" : "72px 48px 32px", fontFamily: "'Helvetica Neue', Arial, sans-serif" }}>
       <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr 1fr", gap: "48px", paddingBottom: "48px", borderBottom: "1px solid #3A3A38" }}>
+        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1.2fr 1fr 1fr", gap: isMobile ? "32px" : "48px", paddingBottom: isMobile ? "32px" : "48px", borderBottom: "1px solid #3A3A38" }}>
           <div>
             <p style={{ color: "#EDEAE2", fontFamily: "'Georgia', 'Times New Roman', serif", fontSize: "24px", margin: "0 0 12px" }}>{content.brand}</p>
             <p style={{ color: "#7C7A72", fontSize: "14px", margin: 0, maxWidth: "280px" }}>{content.tagline}</p>
@@ -76,7 +78,7 @@ export default function Footer() {
             </div>
           </div>
         </div>
-        <div style={{ display: "flex", justifyContent: "space-between", paddingTop: "24px" }}>
+        <div style={{ display: "flex", flexDirection: isMobile ? "column" : "row", gap: isMobile ? "8px" : 0, justifyContent: "space-between", paddingTop: "24px" }}>
           <p style={{ color: "#5A5A57", fontSize: "12px", margin: 0 }}>© {year} {content.brand}. Todos los derechos reservados.</p>
           <p style={{ color: "#5A5A57", fontSize: "12px", margin: 0 }}>Pagos procesados de forma segura</p>
         </div>

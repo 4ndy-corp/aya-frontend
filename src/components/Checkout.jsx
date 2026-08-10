@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useCart } from "../context/CartContext";
+import { useIsMobile } from "../hooks/useIsMobile";
 
 const API_URL = import.meta.env.VITE_API_URL;
 const SHIPPING_COST = 5.0;
@@ -21,6 +22,7 @@ function Field({ label, ...props }) {
 
 export default function Checkout({ onOrderComplete, onBack }) {
   const { items, subtotal, clearCart } = useCart();
+  const isMobile = useIsMobile();
   const [form, setForm] = useState({ name: "", email: "", phone: "", address: "", city: "" });
   const [paymentMethod, setPaymentMethod] = useState("card");
   const [status, setStatus] = useState("idle"); // idle | processing | success | error
@@ -88,7 +90,7 @@ export default function Checkout({ onOrderComplete, onBack }) {
   }
 
   return (
-    <section style={{ background: "#15140F", padding: "80px 48px 112px", fontFamily: "'Helvetica Neue', Arial, sans-serif" }}>
+    <section style={{ background: "#15140F", padding: isMobile ? "48px 20px 72px" : "80px 48px 112px", fontFamily: "'Helvetica Neue', Arial, sans-serif" }}>
       <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
         <button
           onClick={onBack}
@@ -107,7 +109,7 @@ export default function Checkout({ onOrderComplete, onBack }) {
         {items.length === 0 ? (
           <p style={{ color: "#7C7A72", fontSize: "14px" }}>Tu carrito está vacío. Agrega productos desde el catálogo primero.</p>
         ) : (
-          <form onSubmit={handleSubmit} style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: "64px" }}>
+          <form onSubmit={handleSubmit} style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1.2fr 1fr", gap: isMobile ? "40px" : "64px" }}>
             <div>
               <p style={{ color: "#EDEAE2", fontSize: "15px", margin: "0 0 24px", borderBottom: "1px solid #3A3A38", paddingBottom: "16px" }}>
                 Datos de envío

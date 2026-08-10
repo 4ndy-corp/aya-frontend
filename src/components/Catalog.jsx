@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 import { useCart } from "../context/CartContext";
+import { useIsMobile } from "../hooks/useIsMobile";
 
 const BRANDS = ["Todas", "A&A", "Afnan"];
 const GENDERS = ["Todos", "Hombre", "Mujer", "Unisex"];
@@ -26,6 +27,7 @@ function BottleIcon() {
 
 export default function Catalog() {
   const { addItem } = useCart();
+  const isMobile = useIsMobile();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(null);
@@ -81,7 +83,7 @@ export default function Catalog() {
   return (
     <section
       id="catalogo"
-      style={{ background: "#15140F", padding: "80px 48px 112px", fontFamily: "'Helvetica Neue', Arial, sans-serif" }}
+      style={{ background: "#15140F", padding: isMobile ? "56px 20px 72px" : "80px 48px 112px", fontFamily: "'Helvetica Neue', Arial, sans-serif" }}
     >
       <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
         <div style={{ marginBottom: "40px" }}>
@@ -101,7 +103,7 @@ export default function Catalog() {
           </div>
         )}
 
-        <div style={{ display: "flex", gap: "16px", marginBottom: "40px", flexWrap: "wrap" }}>
+        <div style={{ display: "flex", flexDirection: isMobile ? "column" : "row", gap: "16px", marginBottom: isMobile ? "24px" : "40px" }}>
           <input
             type="text"
             value={search}
@@ -120,27 +122,27 @@ export default function Catalog() {
           </select>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "220px 1fr", gap: "48px" }}>
-          <aside>
-            <div style={{ marginBottom: "40px" }}>
+        <div style={{ display: isMobile ? "block" : "grid", gridTemplateColumns: isMobile ? undefined : "220px 1fr", gap: isMobile ? 0 : "48px" }}>
+          <aside style={isMobile ? { display: "flex", gap: "24px", overflowX: "auto", marginBottom: "24px", paddingBottom: "8px" } : undefined}>
+            <div style={{ marginBottom: isMobile ? 0 : "40px", flexShrink: 0 }}>
               <p style={{ color: "#9C9F8E", letterSpacing: "0.14em", textTransform: "uppercase", fontSize: "11px", margin: "0 0 16px" }}>Marca</p>
               {BRANDS.map((b) => (
-                <button key={b} onClick={() => setBrand(b)} style={{ display: "block", width: "100%", textAlign: "left", background: "transparent", border: "none", color: brand === b ? "#EDEAE2" : "#7C7A72", fontSize: "14px", padding: "6px 0", cursor: "pointer" }}>
+                <button key={b} onClick={() => setBrand(b)} style={{ display: isMobile ? "inline-block" : "block", width: isMobile ? "auto" : "100%", marginRight: isMobile ? "12px" : 0, textAlign: "left", background: "transparent", border: "none", color: brand === b ? "#EDEAE2" : "#7C7A72", fontSize: "13px", padding: "6px 0", cursor: "pointer", whiteSpace: "nowrap" }}>
                   {b}
                 </button>
               ))}
             </div>
 
-            <div style={{ marginBottom: "40px" }}>
+            <div style={{ marginBottom: isMobile ? 0 : "40px", flexShrink: 0 }}>
               <p style={{ color: "#9C9F8E", letterSpacing: "0.14em", textTransform: "uppercase", fontSize: "11px", margin: "0 0 16px" }}>Género</p>
               {GENDERS.map((g) => (
-                <button key={g} onClick={() => setGender(g)} style={{ display: "block", width: "100%", textAlign: "left", background: "transparent", border: "none", color: gender === g ? "#EDEAE2" : "#7C7A72", fontSize: "14px", padding: "6px 0", cursor: "pointer" }}>
+                <button key={g} onClick={() => setGender(g)} style={{ display: isMobile ? "inline-block" : "block", width: isMobile ? "auto" : "100%", marginRight: isMobile ? "12px" : 0, textAlign: "left", background: "transparent", border: "none", color: gender === g ? "#EDEAE2" : "#7C7A72", fontSize: "13px", padding: "6px 0", cursor: "pointer", whiteSpace: "nowrap" }}>
                   {g}
                 </button>
               ))}
             </div>
 
-            <div>
+            <div style={{ flexShrink: 0, minWidth: isMobile ? "160px" : "auto" }}>
               <p style={{ color: "#9C9F8E", letterSpacing: "0.14em", textTransform: "uppercase", fontSize: "11px", margin: "0 0 16px" }}>Precio máximo</p>
               <input type="range" min="20" max="80" value={maxPrice} onChange={(e) => setMaxPrice(Number(e.target.value))} style={{ width: "100%" }} />
               <p style={{ color: "#B9B6AC", fontSize: "13px", marginTop: "8px" }}>Hasta {formatPrice(maxPrice)}</p>
@@ -153,11 +155,11 @@ export default function Catalog() {
             ) : filtered.length === 0 ? (
               <p style={{ color: "#7C7A72", fontSize: "14px" }}>No hay fragancias que coincidan con esos filtros.</p>
             ) : (
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1px", background: "#3A3A38" }}>
+              <div style={{ display: "grid", gridTemplateColumns: isMobile ? "repeat(2, 1fr)" : "repeat(3, 1fr)", gap: "1px", background: "#3A3A38" }}>
                 {filtered.map((product) => (
                   <div
                     key={product.id}
-                    style={{ background: "#15140F", padding: "36px 28px", display: "flex", flexDirection: "column", gap: "16px", opacity: product.stock === 0 ? 0.45 : 1 }}
+                    style={{ background: "#15140F", padding: isMobile ? "20px 16px" : "36px 28px", display: "flex", flexDirection: "column", gap: "12px", opacity: product.stock === 0 ? 0.45 : 1 }}
                   >
                     <div style={{ height: "160px", display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
                       {product.image_url ? (

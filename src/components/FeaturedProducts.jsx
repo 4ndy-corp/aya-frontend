@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 import { useCart } from "../context/CartContext";
+import { useIsMobile } from "../hooks/useIsMobile";
 
 function formatPrice(value) {
   return new Intl.NumberFormat("es-EC", { style: "currency", currency: "USD" }).format(value);
@@ -18,6 +19,7 @@ function BottleIcon() {
 
 export default function FeaturedProducts() {
   const { addItem } = useCart();
+  const isMobile = useIsMobile();
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -35,19 +37,19 @@ export default function FeaturedProducts() {
   if (products.length === 0) return null;
 
   return (
-    <section style={{ background: "#15140F", padding: "96px 48px", fontFamily: "'Helvetica Neue', Arial, sans-serif" }}>
+    <section style={{ background: "#15140F", padding: isMobile ? "56px 20px" : "96px 48px", fontFamily: "'Helvetica Neue', Arial, sans-serif" }}>
       <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "56px", borderBottom: "1px solid #3A3A38", paddingBottom: "24px" }}>
+        <div style={{ display: "flex", flexDirection: isMobile ? "column" : "row", gap: isMobile ? "12px" : 0, justifyContent: "space-between", alignItems: isMobile ? "flex-start" : "flex-end", marginBottom: isMobile ? "32px" : "56px", borderBottom: "1px solid #3A3A38", paddingBottom: "24px" }}>
           <div>
             <p style={{ color: "#9C9F8E", letterSpacing: "0.28em", textTransform: "uppercase", fontSize: "12px", margin: "0 0 12px" }}>Selección</p>
-            <h2 style={{ color: "#EDEAE2", fontFamily: "'Georgia', 'Times New Roman', serif", fontWeight: 400, fontSize: "34px", margin: 0 }}>Los más buscados</h2>
+            <h2 style={{ color: "#EDEAE2", fontFamily: "'Georgia', 'Times New Roman', serif", fontWeight: 400, fontSize: isMobile ? "26px" : "34px", margin: 0 }}>Los más buscados</h2>
           </div>
           <a href="#catalogo" style={{ color: "#B9B6AC", fontSize: "13px", letterSpacing: "0.1em", textTransform: "uppercase", textDecoration: "none", borderBottom: "1px solid #7D8085", paddingBottom: "4px" }}>
             Ver todo el catálogo
           </a>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1px", background: "#3A3A38" }}>
+        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: "1px", background: "#3A3A38" }}>
           {products.map((product) => (
             <div key={product.id} style={{ background: "#15140F", padding: "40px 32px", display: "flex", flexDirection: "column", gap: "20px" }}>
               <div style={{ height: "180px", display: "flex", alignItems: "center", justifyContent: "center" }}>

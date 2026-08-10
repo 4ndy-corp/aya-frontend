@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
+import { useIsMobile } from "../hooks/useIsMobile";
 
 const FALLBACK = {
   eyebrow: "A&A · Eau de Parfum",
@@ -9,6 +10,7 @@ const FALLBACK = {
 
 export default function Hero() {
   const [content, setContent] = useState(FALLBACK);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     async function fetchHero() {
@@ -43,15 +45,15 @@ export default function Hero() {
         <path d="M -50 560 C 280 500, 620 620, 900 540 S 1150 460, 1260 560" stroke="#C9CDD3" strokeWidth="1" fill="none" />
       </svg>
 
-      <div style={{ position: "relative", maxWidth: "1200px", margin: "0 auto", padding: "0 48px", minHeight: "640px", display: "grid", gridTemplateColumns: "1.1fr 0.9fr", alignItems: "center", gap: "24px" }}>
+      <div style={{ position: "relative", maxWidth: "1200px", margin: "0 auto", padding: isMobile ? "0 20px" : "0 48px", minHeight: isMobile ? "auto" : "640px", paddingTop: isMobile ? "48px" : 0, paddingBottom: isMobile ? "48px" : 0, display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1.1fr 0.9fr", alignItems: "center", gap: isMobile ? "40px" : "24px" }}>
         <div>
           <p style={{ color: "#9C9F8E", letterSpacing: "0.28em", textTransform: "uppercase", fontSize: "12px", fontFamily: "'Helvetica Neue', Arial, sans-serif", marginBottom: "28px" }}>
             {content.eyebrow}
           </p>
-          <h1 style={{ color: "#EDEAE2", fontSize: "56px", lineHeight: 1.08, fontWeight: 400, margin: 0, maxWidth: "560px" }}>
+          <h1 style={{ color: "#EDEAE2", fontSize: isMobile ? "34px" : "56px", lineHeight: 1.15, fontWeight: 400, margin: 0, maxWidth: isMobile ? "100%" : "560px" }}>
             {titleLines.map((line, i) => <span key={i} style={{ display: "block" }}>{line}</span>)}
           </h1>
-          <p style={{ color: "#B9B6AC", fontSize: "16px", lineHeight: 1.7, fontFamily: "'Helvetica Neue', Arial, sans-serif", maxWidth: "420px", margin: "28px 0 40px" }}>
+          <p style={{ color: "#B9B6AC", fontSize: "16px", lineHeight: 1.7, fontFamily: "'Helvetica Neue', Arial, sans-serif", maxWidth: isMobile ? "100%" : "420px", margin: "28px 0 40px" }}>
             {content.subtitle}
           </p>
           <a
@@ -62,7 +64,7 @@ export default function Hero() {
           </a>
         </div>
 
-        <div style={{ position: "relative", display: "flex", justifyContent: "center", alignItems: "center", height: "560px" }}>
+        <div style={{ position: "relative", display: "flex", justifyContent: "center", alignItems: "center", height: isMobile ? "320px" : "560px" }}>
           <div style={{ position: "absolute", width: "300px", height: "300px", borderRadius: "50%", background: "radial-gradient(circle, rgba(201,205,211,0.16) 0%, rgba(201,205,211,0.03) 60%, transparent 75%)", top: "30px" }} />
           <svg width="220" height="480" viewBox="0 0 220 480" aria-hidden="true">
             <rect x="30" y="140" width="160" height="300" rx="6" fill="rgba(237,234,226,0.06)" stroke="#7D8085" strokeWidth="1.5" />
