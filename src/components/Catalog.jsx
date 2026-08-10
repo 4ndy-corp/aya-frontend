@@ -3,7 +3,6 @@ import { supabase } from "../lib/supabaseClient";
 import { useCart } from "../context/CartContext";
 import { useIsMobile } from "../hooks/useIsMobile";
 
-const BRANDS = ["Todas", "A&A", "Afnan"];
 const GENDERS = ["Todos", "Hombre", "Mujer", "Unisex"];
 const SORT_OPTIONS = [
   { value: "relevance", label: "Relevancia" },
@@ -33,6 +32,7 @@ export default function Catalog() {
   const [loadError, setLoadError] = useState(null);
 
   const [search, setSearch] = useState("");
+  const [brandSearch, setBrandSearch] = useState("");
   const [brand, setBrand] = useState("Todas");
   const [gender, setGender] = useState("Todos");
   const [maxPrice, setMaxPrice] = useState(80);
@@ -62,6 +62,16 @@ export default function Catalog() {
 
     fetchProducts();
   }, []);
+
+  const brands = useMemo(() => {
+    const uniqueBrands = [...new Set(products.map((p) => p.brand).filter(Boolean))].sort();
+    return ["Todas", ...uniqueBrands];
+  }, [products]);
+
+  const visibleBrands = useMemo(() => {
+    if (!brandSearch) return brands;
+    return brands.filter((b) => b === "Todas" || b.toLowerCase().includes(brandSearch.toLowerCase()));
+  }, [brands, brandSearch]);
 
   const filtered = useMemo(() => {
     let result = products.filter((p) => {
@@ -124,9 +134,18 @@ export default function Catalog() {
 
         <div style={{ display: isMobile ? "block" : "grid", gridTemplateColumns: isMobile ? undefined : "220px 1fr", gap: isMobile ? 0 : "48px" }}>
           <aside style={isMobile ? { display: "flex", gap: "24px", overflowX: "auto", marginBottom: "24px", paddingBottom: "8px" } : undefined}>
-            <div style={{ marginBottom: isMobile ? 0 : "40px", flexShrink: 0 }}>
+            <div style={{ marginBottom: isMobile ? 0 : "40px", flexShrink: 0, maxHeight: isMobile ? "none" : "260px", overflowY: isMobile ? "visible" : "auto" }}>
               <p style={{ color: "#9C9F8E", letterSpacing: "0.14em", textTransform: "uppercase", fontSize: "11px", margin: "0 0 16px" }}>Marca</p>
-              {BRANDS.map((b) => (
+              {!isMobile && brands.length > 8 && (
+                <input
+                  type="text"
+                  value={brandSearch}
+                  onChange={(e) => setBrandSearch(e.target.value)}
+                  placeholder="Buscar marca..."
+                  style={{ width: "100%", background: "transparent", border: "1px solid #3A3A38", color: "#EDEAE2", padding: "8px 10px", fontSize: "12px", outline: "none", marginBottom: "12px", boxSizing: "border-box" }}
+                />
+              )}
+              {visibleBrands.map((b) => (
                 <button key={b} onClick={() => setBrand(b)} style={{ display: isMobile ? "inline-block" : "block", width: isMobile ? "auto" : "100%", marginRight: isMobile ? "12px" : 0, textAlign: "left", background: "transparent", border: "none", color: brand === b ? "#EDEAE2" : "#7C7A72", fontSize: "13px", padding: "6px 0", cursor: "pointer", whiteSpace: "nowrap" }}>
                   {b}
                 </button>
