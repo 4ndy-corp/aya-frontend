@@ -48,7 +48,7 @@ function ImageUploadField({ imageUrl, onChange }) {
       const publicUrl = await uploadProductImage(file);
       onChange(publicUrl);
     } catch (err) {
-      setUploadError("No se pudo subir la imagen. Intenta de nuevo.");
+      setUploadError(`No se pudo subir: ${err.message || "error desconocido"}`);
     } finally {
       setUploading(false);
     }
