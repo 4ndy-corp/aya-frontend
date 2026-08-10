@@ -35,7 +35,7 @@ export default function Catalog() {
   const [brandSearch, setBrandSearch] = useState("");
   const [brand, setBrand] = useState("Todas");
   const [gender, setGender] = useState("Todos");
-  const [maxPrice, setMaxPrice] = useState(80);
+  const [maxPrice, setMaxPrice] = useState(50);
   const [sort, setSort] = useState("relevance");
 
   // Trae los productos reales de Supabase al montar el componente.
@@ -163,7 +163,7 @@ export default function Catalog() {
 
             <div style={{ flexShrink: 0, minWidth: isMobile ? "160px" : "auto" }}>
               <p style={{ color: "#9C9F8E", letterSpacing: "0.14em", textTransform: "uppercase", fontSize: "11px", margin: "0 0 16px" }}>Precio máximo</p>
-              <input type="range" min="20" max="80" value={maxPrice} onChange={(e) => setMaxPrice(Number(e.target.value))} style={{ width: "100%" }} />
+              <input type="range" min="20" max="50" value={maxPrice} onChange={(e) => setMaxPrice(Number(e.target.value))} style={{ width: "100%" }} />
               <p style={{ color: "#B9B6AC", fontSize: "13px", marginTop: "8px" }}>Hasta {formatPrice(maxPrice)}</p>
             </div>
           </aside>
